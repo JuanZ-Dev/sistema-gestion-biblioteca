@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editorial{% endblock %}
+
+{% block body %}
+    <h1>Editorial</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ editorial.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ editorial.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ editorial.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ editorial.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ editorial.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_editorial_index') }}">back to list</a>
+
+    <a href="{{ path('app_editorial_edit', {'id': editorial.id}) }}">edit</a>
+
+    {{ include('editorial/_delete_form.html.twig') }}
+{% endblock %}
