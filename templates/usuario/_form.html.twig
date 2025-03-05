@@ -1,0 +1,8 @@
+{{ form_start(form) }}
+    {{ form_row(form.username) }}
+    <div class="{% if usuario.id is null %}d-none{% endif %}">
+        {{ form_row(form.passwordActual) }}
+    </div>
+    {{ form_row(form.password) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

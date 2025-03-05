@@ -1,0 +1,30 @@
+{% macro collection(form) %}
+    <ul id="{{ form.vars.id }}"
+        class="list-group"
+        data-index="{{ form.children|length > 0 ? form.children|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}"
+            {% if form.vars.prototype.vars.name %}
+                data-prototype-name="{{ form.vars.prototype.vars.name | e }}"
+            {% endif %}
+        >
+
+        {% for detalle in form %}
+            <li class="list-group-item pe-sm-12 collection_item" style="position: relative;">
+                {{ form_widget(detalle) }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button type="button"
+            class="btn btn-sm btn-success add_collection_item"
+            data-collection-holder-id="{{ form.vars.id }}"><i class="fa fa-plus"></i> Agregar
+    </button>
+{% endmacro %}
+
+{% macro btn_show(url) %}
+    <a class="btn btn-sm btn-info" href="{{ url }}"><i class="fa fa-search"></i> </a>
+{% endmacro %}
+
+{% macro btn_edit(url) %}
+    <a class="btn btn-sm btn-warning" href="{{ url }}"><i class="fa fa-pencil"></i> </a>
+{% endmacro %}
