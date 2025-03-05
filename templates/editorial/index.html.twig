@@ -8,22 +8,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
-                <th>Email</th>
-                <th>actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for editorial in editorials %}
             <tr>
-                <td>{{ editorial.id }}</td>
                 <td>{{ editorial.nombre }}</td>
                 <td>{{ editorial.direccion }}</td>
                 <td>{{ editorial.telefono }}</td>
-                <td>{{ editorial.email }}</td>
                 <td>
                     <a href="{{ path('app_editorial_show', {'id': editorial.id}) }}">show</a>
                     <a href="{{ path('app_editorial_edit', {'id': editorial.id}) }}">edit</a>
