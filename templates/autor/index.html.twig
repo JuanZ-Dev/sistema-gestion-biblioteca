@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Autor index{% endblock %}
+
+{% block body %}
+    <h1>Autor index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Nacionalidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for autor in autors %}
+            <tr>
+                <td>{{ autor.nombre }}</td>
+                <td>{{ autor.nacionalidad }}</td>
+{#                <td>{{ autor.fechaNacimiento ? autor.fechaNacimiento|date('Y-m-d') : '' }}</td>#}
+{#                <td>{{ autor.fechaFallecimiento ? autor.fechaFallecimiento|date('Y-m-d') : '' }}</td>#}
+                <td>
+                    <a href="{{ path('app_autor_show', {'id': autor.id}) }}">show</a>
+                    <a href="{{ path('app_autor_edit', {'id': autor.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_autor_new') }}">Create new</a>
+{% endblock %}
