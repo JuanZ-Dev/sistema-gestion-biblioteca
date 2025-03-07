@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Libro{% endblock %}
+
+{% block body %}
+    <h1>Create new Libro</h1>
+
+    {{ include('libro/_form.html.twig') }}
+
+    <a href="{{ path('app_libro_index') }}">back to list</a>
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#libro_autor').select2();
+        });
+    </script>
+{% endblock %}

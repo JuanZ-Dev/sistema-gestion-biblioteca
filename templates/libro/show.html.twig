@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Libro{% endblock %}
+
+{% block body %}
+    <h1>Libro</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Titulo</th>
+                <td>{{ libro.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Isbn</th>
+                <td>{{ libro.isbn }}</td>
+            </tr>
+            <tr>
+                <th>Año de publicacion</th>
+                <td>{{ libro.anioPublicacion }}</td>
+            </tr>
+            <tr>
+                <th>Editorial</th>
+                <td>{{ libro.editorial.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Categoria</th>
+                <td>{{ libro.categoria.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Autor(es)</th>
+                <td>
+                    <ul>
+                        {% for autor in libro.autor %}
+                            <li>{{ autor.nombre }}</li>
+                        {% else %}
+                            <li>No hay autores asociados a este libro.</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Idioma</th>
+                <td>{{ libro.idioma }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ libro.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_libro_index') }}">back to list</a>
+
+    <a href="{{ path('app_libro_edit', {'id': libro.id}) }}">edit</a>
+
+    {{ include('libro/_delete_form.html.twig') }}
+{% endblock %}

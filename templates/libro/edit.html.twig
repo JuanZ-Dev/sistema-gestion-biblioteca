@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Libro{% endblock %}
+
+{% block body %}
+    <h1>Edit Libro</h1>
+
+    {{ include('libro/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_libro_index') }}">back to list</a>
+
+    {{ include('libro/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#libro_autor').select2();
+        });
+    </script>
+{% endblock %}
