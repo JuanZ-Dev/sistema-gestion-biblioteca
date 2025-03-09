@@ -45,9 +45,16 @@ class Libro
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
+    /**
+     * @var Collection<int, Ejemplar>
+     */
+    #[ORM\OneToMany(targetEntity: Ejemplar::class, mappedBy: 'libro', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $ejemplares;
+
     public function __construct()
     {
         $this->autor = new ArrayCollection();
+        $this->ejemplares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,4 +169,42 @@ class Libro
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Ejemplar>
+     */
+    public function getEjemplares(): Collection
+    {
+        return $this->ejemplares;
+    }
+
+    public function addEjemplare(Ejemplar $ejemplar): static
+    {
+        if (!$this->ejemplares->contains($ejemplar)) {
+            $this->ejemplares->add($ejemplar);
+            $ejemplar->setLibro($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEjemplare(Ejemplar $ejemplar): static
+    {
+        if ($this->ejemplares->removeElement($ejemplar)) {
+            // set the owning side to null (unless already changed)
+            if ($ejemplar->getLibro() === $this) {
+                $ejemplar->setLibro(null);
+            }
+        }
+
+        return $this;
+    }
+
+//    public function getEstado(): string
+//    {
+//        foreach ($this->ejemplares as $ejemplar) {
+//            return $ejemplar->getEstado() !== null ? 'disponible': 'pendiente';
+//        }
+//        return 'prestado';
+//    }
 }

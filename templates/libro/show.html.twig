@@ -47,6 +47,22 @@
                 <th>Descripcion</th>
                 <td>{{ libro.descripcion }}</td>
             </tr>
+            <tr>
+                <th>Ejemplares</th>
+                <td>
+                    <ul>
+                        {% for ejemplar in libro.ejemplares %}
+                            <li>
+                                <strong>Código:</strong> {{ ejemplar.codigo }}<br>
+                                <strong>Estado:</strong> {{ ejemplar.estado }}<br>
+                                <strong>Fecha de Adquisición:</strong> {{ ejemplar.fechaAdquisicion|date('d/m/Y') }}
+                            </li>
+                        {% else %}
+                            <li>No hay ejemplares asociados a este libro.</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
         </tbody>
     </table>
 

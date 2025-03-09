@@ -12,6 +12,7 @@
                 <th>Isbn</th>
                 <th>Año de publicacion</th>
                 <th>Idioma</th>
+                <th>Estado</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,8 +21,18 @@
             <tr>
                 <td>{{ libro.titulo }}</td>
                 <td>{{ libro.isbn }}</td>
-                <td>{{ libro.anioPublicacion }}</td>
+                <td>{{ libro.anio_publicacion }}</td>
                 <td>{{ libro.idioma }}</td>
+                <td>
+                    {% if libro.estado == 'Disponible' %}
+                        <span style="color: green; font-weight: bold;">Disponible</span>
+                        <span>({{ libro.disponibles }})</span>
+                    {% elseif libro.estado == 'Prestado' %}
+                        <span style="color: red; font-weight: bold;">Prestado</span>
+                    {% else %}
+                        <span style="color: darkorange; font-weight: bold;">Pendiente</span>
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{{ path('app_libro_show', {'id': libro.id}) }}">show</a>
                     <a href="{{ path('app_libro_edit', {'id': libro.id}) }}">edit</a>

@@ -16,6 +16,26 @@ class LibroRepository extends ServiceEntityRepository
         parent::__construct($registry, Libro::class);
     }
 
+    public function estadosLibro(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.ejemplares', 'e')
+            ->addSelect('l.id, l.titulo, l.isbn, l.anio_publicacion, l.idioma')
+            ->addSelect('
+                CASE 
+                    WHEN COUNT(e.id) = 0 THEN :pendiente
+                    WHEN SUM(CASE WHEN e.estado = :disponible THEN 1 ELSE 0 END) > 0 THEN :disponible 
+                    ELSE :prestado
+                END AS estado')
+            ->addSelect('SUM(CASE WHEN e.estado = :disponible THEN 1 ELSE 0 END) AS disponibles')
+            ->setParameter('disponible', 'Disponible')
+            ->setParameter('prestado', 'Prestado')
+            ->setParameter('pendiente', 'Pendiente')
+            ->groupBy('l.id')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Libro[] Returns an array of Libro objects
     //     */

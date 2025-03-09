@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Libro;
 use App\Form\LibroType;
+use App\Repository\EjemplarRepository;
 use App\Repository\LibroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +19,8 @@ final class LibroController extends AbstractController
     public function index(LibroRepository $libroRepository): Response
     {
         return $this->render('libro/index.html.twig', [
-            'libros' => $libroRepository->findAll(),
+//            'libros' => $libroRepository->findAll(),
+            'libros' => $libroRepository->estadosLibro(),
         ]);
     }
 
@@ -31,6 +33,19 @@ final class LibroController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($libro);
+            $entityManager->flush();
+
+            foreach ($libro->getEjemplares() as $ejemplar) {
+                $numEjemplar = $ejemplar->getCodigo();
+                $codigo = sprintf('LIB-%d-%03d', $libro->getId(), $numEjemplar);
+                $ejemplar->setCodigo($codigo);
+
+                $ejemplar->setEstado('disponible');
+
+                $ejemplar->setLibro($libro);
+
+                $entityManager->persist($ejemplar);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_libro_index', [], Response::HTTP_SEE_OTHER);
@@ -57,8 +72,20 @@ final class LibroController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            foreach ($libro->getEjemplares() as $ejemplar) {
+                if ($ejemplar->getId() === null) {
+                    $numEjemplar = $ejemplar->getCodigo();
+                    $codigo = sprintf('LIB-%d-%03d', $libro->getId(), $numEjemplar);
+                    $ejemplar->setCodigo($codigo);
 
+                    $ejemplar->setEstado('disponible');
+
+                    $ejemplar->setLibro($libro);
+
+                    $entityManager->persist($ejemplar);
+                }
+            }
+            $entityManager->flush();
             return $this->redirectToRoute('app_libro_index', [], Response::HTTP_SEE_OTHER);
         }
 

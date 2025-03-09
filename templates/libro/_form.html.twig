@@ -1,4 +1,16 @@
+{% import 'macro/actions.html.twig' as actions %}
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+{#    {{ form_widget(form) }}#}
+    {{ form_row(form.titulo) }}
+    {{ form_row(form.isbn) }}
+    {{ form_row(form.anio_publicacion) }}
+    {{ form_row(form.idioma) }}
+    {{ form_row(form.descripcion) }}
+    {{ form_row(form.editorial) }}
+    {{ form_row(form.categoria) }}
+    {{ form_row(form.autor) }}
+    {{ actions.collection(form.ejemplares) }}
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
