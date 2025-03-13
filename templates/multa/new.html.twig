@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Multa{% endblock %}
+
+{% block body %}
+    <h1>Create new Multa</h1>
+
+    {{ include('multa/_form.html.twig') }}
+
+    <a href="{{ path('app_multa_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            const costoMulta = 3;
+
+            $('#multa_fecha').on('change', function(){
+                let fechaMulta = $(this).val();
+
+                const parsearFecha = (fechaStr) => {
+                    if(!fechaStr) return new Date();
+
+                    const [anio, mes, dia] = fechaStr.split('-');
+                    return new Date(anio, mes - 1, dia, 12, 0, 0);
+                };
+
+                let $selected = $('#multa_prestamo').find('option:selected');
+
+                let dataFechaPrevista = $selected.data('fecha-prevista');
+                let dataFechaReal = $selected.data('fecha-real');
+
+                let fechaPrevista = parsearFecha(dataFechaPrevista);
+                let fechaReal = dataFechaReal ? parsearFecha(dataFechaReal) : parsearFecha(fechaMulta);
+                const diferencia = fechaReal.getTime() - fechaPrevista.getTime();
+
+                let diasRetraso = Math.floor(diferencia / (1000 * 3600 * 24));
+
+                diasRetraso = diasRetraso > 0 ? diasRetraso : 0;
+
+                const monto = diasRetraso * costoMulta;
+                $('#multa_monto').val(monto);
+            });
+        });
+
+    </script>
+{% endblock %}

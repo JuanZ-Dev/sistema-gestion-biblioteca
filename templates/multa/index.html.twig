@@ -1,0 +1,59 @@
+{% import 'macro/actions.html.twig' as actions %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Multas{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="mb-4 d-flex align-items-center gap-3">
+            <svg class="nav-icon" style="height: 40px; width: 40px">
+                <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-description') }}"></use>
+            </svg> Multas
+        </h1>
+        <a class="btn btn-success rounded-3" href="{{ path('app_multa_new') }}">
+            <i class="fa-solid fa-circle-plus"></i> Agregar
+        </a>
+    </div>
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Usuario</th>
+                <th>Libro prestado</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for multa in multas %}
+            <tr>
+                <td>{{ multa.prestamo.usuario.nombre }}</td>
+                <td>{{ multa.prestamo.ejemplar.libro.titulo }}</td>
+                <td>{{ multa.monto }}</td>
+                <td>{{ multa.fecha ? multa.fecha|date('Y-m-d') : '' }}</td>
+                <td>{{ multa.estado }}</td>
+                <td>
+{#                    <a href="{{ path('app_multa_show', {'id': multa.id}) }}">show</a>#}
+{#                    <a href="{{ path('app_multa_edit', {'id': multa.id}) }}">edit</a>#}
+                    {{ actions.btn_show(path('app_multa_show', {'id': multa.id})) }}
+                    {{ actions.btn_edit(path('app_multa_edit', {'id': multa.id})) }}
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-coreui-toggle="modal" data-coreui-target="#deleteModal"
+                            data-id="{{ multa.id }}"
+                            data-token="{{ csrf_token('delete' ~ multa.id) }}"
+                            data-action="{{ path('app_multa_delete', {'id': '__ID__'}) }}"
+                            onclick="setDeleteFormAction(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">nNo se encontraron registros</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'components/delete_modal.html.twig' %}
+{% endblock %}

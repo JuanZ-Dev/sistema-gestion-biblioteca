@@ -1,0 +1,6 @@
+<form style="display: inline-block" method="post" action="{{ path('app_multa_delete', {'id': multa.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ multa.id) }}">
+    <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-coreui-toggle="modal" data-coreui-target="#deleteEditorial">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>
