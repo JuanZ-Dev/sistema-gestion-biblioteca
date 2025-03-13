@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,7 +23,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
@@ -32,6 +33,29 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     private ?string $passwordActual = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $nombre = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $telefono = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $direccion = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha_registro = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $estado = null;
+
+    public function __construct()
+    {
+        $this->fecha_registro = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -69,7 +93,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+//        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -116,5 +140,77 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPasswordActual(?string $passwordActual): void
     {
         $this->passwordActual = $passwordActual;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre): static
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getTelefono(): ?string
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(?string $telefono): static
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    public function getDireccion(): ?string
+    {
+        return $this->direccion;
+    }
+
+    public function setDireccion(?string $direccion): static
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    public function getFechaRegistro(): ?\DateTimeInterface
+    {
+        return $this->fecha_registro;
+    }
+
+    public function setFechaRegistro(\DateTimeInterface $fecha_registro): static
+    {
+        $this->fecha_registro = $fecha_registro;
+
+        return $this;
+    }
+
+    public function getEstado(): ?string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): static
+    {
+        $this->estado = $estado;
+
+        return $this;
     }
 }

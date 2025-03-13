@@ -14,3 +14,44 @@
 
     {{ include('usuario/_delete_form.html.twig') }}
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            function generarUsername(nombre) {
+                if(nombre !== ""){
+                    let partes = nombre.split(' ');
+                    console.log(partes.length)
+                    let username = "";
+                    if(partes.length >= 2){
+                        username += partes[0].charAt(0).toLowerCase();
+                        username += partes[1].toLowerCase();
+                        if(partes.length >= 3){
+                            username += partes[2].charAt(0).toLowerCase();
+                        }
+                    } else {
+                        username = nombre.toLowerCase();
+                    }
+                    return username;
+                }
+            }
+
+            $('#usuario_nombre').on('blur', function() {
+                let nombre = $(this).val().trim();
+                let username = generarUsername(nombre);
+                $('#usuario_username').val(username);
+            });
+
+            function primeraLetraMayus(nombre) {
+                return nombre.replace(/\b\w/g, function(letra) {
+                    return letra.toUpperCase();
+                });
+            }
+
+            $("#usuario_nombre").on("input", function() {
+                let nombre = $(this).val();
+                $(this).val(primeraLetraMayus(nombre));
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,37 +1,72 @@
+{% import 'macro/actions.html.twig' as actions %}
 {% extends 'base.html.twig' %}
 
-{% block title %}Usuario index{% endblock %}
+{% block title %}Usuarios{% endblock %}
+
+{% set rolNombres = {
+    'ROLE_ADMIN': 'Administrador',
+    'ROLE_EMPLEADO': 'Empleado',
+    'ROLE_PROFESOR': 'Profesor',
+    'ROLE_ALUMNO': 'Alumno',
+    'ROLE_INVITADO': 'Invitado'
+} %}
 
 {% block body %}
-    <h1>Usuario index</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="mb-4 d-flex align-items-center gap-3">
+            <svg class="nav-icon" style="height: 40px; width: 40px">
+                <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-user') }}"></use>
+            </svg> Usuarios
+        </h1>
+        <a class="btn btn-success rounded-3" href="{{ path('app_usuario_new') }}">
+            <i class="fa-solid fa-circle-plus"></i> Agregar
+        </a>
+    </div>
 
-    <table class="table">
-        <thead>
+    <table class="table table-hover">
+        <thead class="table-dark">
             <tr>
-                <th>Id</th>
+                <th>Nombre</th>
                 <th>Username</th>
-                <th>Roles</th>
+                <th>Rol</th>
+                <th>Estado</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for usuario in usuarios %}
             <tr>
-                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
                 <td>{{ usuario.username }}</td>
-                <td>{{ usuario.roles ? usuario.roles|json_encode : '' }}</td>
+                <td>{{ usuario.roles ? usuario.roles|map(r => rolNombres[r] ?? r)|join(', ') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_usuario_show', {'id': usuario.id}) }}">show</a>
-                    <a href="{{ path('app_usuario_edit', {'id': usuario.id}) }}">edit</a>
+                    {% if usuario.estado == 'activo' %}
+                        <span class="badge bg-success">Activo</span>
+                    {% else %}
+                        <span class="badge bg-danger">Suspendido</span>
+                    {% endif %}
+                </td>
+                <td>
+{#                    <a href="{{ path('app_usuario_show', {'id': usuario.id}) }}">show</a>#}
+{#                    <a href="{{ path('app_usuario_edit', {'id': usuario.id}) }}">edit</a>#}
+                    {{ actions.btn_show(path('app_usuario_show', {'id': usuario.id})) }}
+                    {{ actions.btn_edit(path('app_usuario_edit', {'id': usuario.id})) }}
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-coreui-toggle="modal" data-coreui-target="#deleteModal"
+                            data-id="{{ usuario.id }}"
+                            data-token="{{ csrf_token('delete' ~ usuario.id) }}"
+                            data-action="{{ path('app_usuario_delete', {'id': '__ID__'}) }}"
+                            onclick="setDeleteFormAction(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">No se encontraron registros</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_usuario_new') }}">Create new</a>
+    {% include 'components/delete_modal.html.twig' %}
 {% endblock %}

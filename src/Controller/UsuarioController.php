@@ -33,6 +33,7 @@ final class UsuarioController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $passwordEncrypted = $hasher->hashPassword($usuario, $usuario->getPassword());
             $usuario->setPassword($passwordEncrypted);
+
             $entityManager->persist($usuario);
             $entityManager->flush();
 
@@ -61,6 +62,7 @@ final class UsuarioController extends AbstractController
         UserPasswordHasherInterface $hasher,
     ): Response {
         $passwordDefault = $usuario->getPassword();
+
         $form = $this->createForm(UsuarioType::class, $usuario);
         $form->handleRequest($request);
 

@@ -1,8 +1,15 @@
 {{ form_start(form) }}
+    {{ form_row(form.nombre) }}
     {{ form_row(form.username) }}
     <div class="{% if usuario.id is null %}d-none{% endif %}">
         {{ form_row(form.passwordActual) }}
     </div>
     {{ form_row(form.password) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.telefono) }}
+    {{ form_row(form.direccion) }}
+    {{ form_row(form.fechaRegistro) }}
+    {{ form_row(form.estado) }}
+    {{ form_row(form.roles) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

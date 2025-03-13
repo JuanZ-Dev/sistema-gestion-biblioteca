@@ -2,22 +2,50 @@
 
 {% block title %}Usuario{% endblock %}
 
+{% set rolNombres = {
+    'ROLE_ADMIN': 'Administrador',
+    'ROLE_EMPLEADO': 'Empleado',
+    'ROLE_PROFESOR': 'Profesor',
+    'ROLE_ALUMNO': 'Alumno',
+    'ROLE_INVITADO': 'Invitado'
+} %}
+
 {% block body %}
     <h1>Usuario</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ usuario.id }}</td>
+                <th>Nombre</th>
+                <td>{{ usuario.nombre }}</td>
             </tr>
             <tr>
                 <th>Username</th>
                 <td>{{ usuario.username }}</td>
             </tr>
             <tr>
-                <th>Roles</th>
-                <td>{{ usuario.roles ? usuario.roles|json_encode : '' }}</td>
+                <th>Rol</th>
+                <td>{{ usuario.roles ? usuario.roles|map(r => rolNombres[r] ?? r)|join(', ') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ usuario.email }}</td>
+            </tr>
+            <tr>
+                <th>Teléfono</th>
+                <td>{{ usuario.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Dirección</th>
+                <td>{{ usuario.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de registro</th>
+                <td>{{ usuario.fechaRegistro ? usuario.fechaRegistro|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ usuario.estado }}</td>
             </tr>
         </tbody>
     </table>
