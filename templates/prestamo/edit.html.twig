@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Prestamo{% endblock %}
+
+{% block body %}
+    <h1>Edit Prestamo</h1>
+
+    {{ include('prestamo/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_prestamo_index') }}">back to list</a>
+
+    {{ include('prestamo/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('#prestamo_fecha_prestamo').on('change', function() {
+                let fechaPrestamo = new Date($(this).val());
+
+                if (!isNaN(fechaPrestamo)) {
+                    fechaPrestamo.setDate(fechaPrestamo.getDate() + 7);
+
+                    // Formatear la fecha a YYYY-MM-DD para que sea compatible con el input date
+                    let fechaFormateada = fechaPrestamo.toISOString().split('T')[0];
+
+                    $('#prestamo_fecha_devolucion_prevista').val(fechaFormateada);
+                }
+            });
+        });
+    </script>
+{% endblock %}

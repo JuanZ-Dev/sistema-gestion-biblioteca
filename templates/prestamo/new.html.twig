@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Prestamo{% endblock %}
+
+{% block body %}
+    <h1>Create new Prestamo</h1>
+
+    {{ include('prestamo/_form.html.twig') }}
+
+    <a href="{{ path('app_prestamo_index') }}">back to list</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('#prestamo_fecha_prestamo').on('change', function(){
+                let fechaPrestamo = $(this).val();
+
+                if (fechaPrestamo) {
+                    let dateObj = new Date(fechaPrestamo);
+                    dateObj.setDate(dateObj.getDate() + 8);
+
+                    let anio = dateObj.getFullYear();
+                    let mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                    let dia = dateObj.getDate().toString().padStart(2, '0');
+                    let nuevaFecha = anio + '-' + mes + '-' + dia;
+
+                    $('#prestamo_fecha_devolucion_prevista').val(nuevaFecha);
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prestamo{% endblock %}
+
+{% block body %}
+    <h1>Prestamo</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Libro</th>
+                <td>{{ prestamo.ejemplar.libro.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Ejemplar</th>
+                <td>{{ prestamo.ejemplar.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Usuario</th>
+                <td>{{ prestamo.usuario.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de prestamo</th>
+                <td>{{ prestamo.fechaPrestamo ? prestamo.fechaPrestamo|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de devolucion prevista</th>
+                <td>{{ prestamo.fechaDevolucionPrevista ? prestamo.fechaDevolucionPrevista|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de devolucion real</th>
+                <td>{{ prestamo.fechaDevolucionReal ? prestamo.fechaDevolucionReal|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ prestamo.estado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_prestamo_index') }}">back to list</a>
+
+    <a href="{{ path('app_prestamo_edit', {'id': prestamo.id}) }}">edit</a>
+
+    {{ include('prestamo/_delete_form.html.twig') }}
+{% endblock %}

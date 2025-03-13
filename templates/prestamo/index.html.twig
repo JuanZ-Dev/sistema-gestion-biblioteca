@@ -1,0 +1,70 @@
+{% import 'macro/actions.html.twig' as actions %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Prestamos{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="mb-4 d-flex align-items-center gap-3">
+            <svg class="nav-icon" style="height: 40px; width: 40px">
+                <use xlink:href="{{ asset('vendors/@coreui/icons/svg/free.svg#cil-transfer') }}"></use>
+            </svg> Prestamos
+        </h1>
+        <a class="btn btn-success rounded-3" href="{{ path('app_prestamo_new') }}">
+            <i class="fa-solid fa-circle-plus"></i> Agregar
+        </a>
+    </div>
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Fecha_prestamo</th>
+                <th>Fecha_devolucion_prevista</th>
+{#                <th>Fecha_devolucion_real</th>#}
+                <th>Estado</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.usuario.nombre }}</td>
+                <td>{{ prestamo.ejemplar.libro.titulo }}</td>
+                <td>{{ prestamo.fechaPrestamo ? prestamo.fechaPrestamo|date('d-m-Y') : '' }}</td>
+                <td>{{ prestamo.fechaDevolucionPrevista ? prestamo.fechaDevolucionPrevista|date('d-m-Y') : '' }}</td>
+{#                <td>{{ prestamo.fechaDevolucionReal ? prestamo.fechaDevolucionReal|date('Y-m-d') : '' }}</td>#}
+                <td>
+                    {% if prestamo.estado == 'activo' %}
+                        <span class="badge bg-success">Activo</span>
+                    {% elseif prestamo.estado == 'devuelto' %}
+                        <span class="badge" style="background-color: darkorange">Devuelto</span>
+                    {% else %}
+                        <span class="badge bg-danger">Retrasado</span>
+                    {% endif %}
+                </td>
+                <td>
+{#                    <a href="{{ path('app_prestamo_show', {'id': prestamo.id}) }}">show</a>#}
+{#                    <a href="{{ path('app_prestamo_edit', {'id': prestamo.id}) }}">edit</a>#}
+                    {{ actions.btn_show(path('app_prestamo_show', {'id': prestamo.id})) }}
+                    {{ actions.btn_edit(path('app_prestamo_edit', {'id': prestamo.id})) }}
+                    <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-coreui-toggle="modal" data-coreui-target="#deleteModal"
+                            data-id="{{ prestamo.id }}"
+                            data-token="{{ csrf_token('delete' ~ prestamo.id) }}"
+                            data-action="{{ path('app_prestamo_delete', {'id': '__ID__'}) }}"
+                            onclick="setDeleteFormAction(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No se encontraron registros</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'components/delete_modal.html.twig' %}
+{% endblock %}
