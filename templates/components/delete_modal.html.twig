@@ -1,0 +1,35 @@
+<div class="modal fade" id="deleteModal" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fa-solid fa-circle-exclamation"></i> Eliminar Registro
+                </h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que quieres eliminar este registro?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-success rounded-3" data-coreui-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="post" action="" style="display: inline-block">
+                    <input type="hidden" name="_token" id="deleteToken" value="">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script>
+        function setDeleteFormAction(button) {
+            let itemId = button.getAttribute('data-id');
+            let csrfToken = button.getAttribute('data-token');
+
+            let deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = button.getAttribute('data-action').replace('__ID__', itemId);
+            document.getElementById('deleteToken').value = csrfToken;
+        }
+    </script>
+{% endblock %}
