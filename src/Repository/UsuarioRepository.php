@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Usuario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,6 +32,25 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function usuariosPorRoles(array $roles, array $usuarioId): QueryBuilder
+    {
+        if (!empty($usuarioId)) {
+            return $this->createQueryBuilder('u')
+                ->where('u.id = :usuarioId')
+                ->setParameter('usuarioId', $usuarioId);
+        }
+
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :role1')
+            ->orWhere('u.roles LIKE :role2')
+            ->orWhere('u.roles LIKE :role3')
+            ->andWhere('u.estado = :estado')
+            ->setParameter('role1', '%"'.$roles[0].'"%')
+            ->setParameter('role2', '%"'.$roles[1].'"%')
+            ->setParameter('role3', '%"'.$roles[2].'"%')
+            ->setParameter('estado', 'activo');
     }
 
     //    /**

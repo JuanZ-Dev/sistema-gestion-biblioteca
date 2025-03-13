@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Libro;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -28,12 +29,43 @@ class LibroRepository extends ServiceEntityRepository
                     ELSE :prestado
                 END AS estado')
             ->addSelect('SUM(CASE WHEN e.estado = :disponible THEN 1 ELSE 0 END) AS disponibles')
-            ->setParameter('disponible', 'Disponible')
-            ->setParameter('prestado', 'Prestado')
-            ->setParameter('pendiente', 'Pendiente')
+            ->setParameter('disponible', 'disponible')
+            ->setParameter('prestado', 'prestado')
+            ->setParameter('pendiente', 'pendiente')
             ->groupBy('l.id')
             ->getQuery()
             ->getResult();
+    }
+
+//    public function librosConEjemplaresDisponibles()
+//    {
+//        return $this->createQueryBuilder('l')
+//            ->join('l.ejemplares', 'e')
+//            ->andWhere('e.estado = :estado')
+//            ->setParameter('estado', 'disponible')
+//            ->groupBy('l.id')
+//            ->getQuery()
+//            ->getResult();
+//    }
+
+    public function librosConEjemplaresDisponibles(array $ejemplarId): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('l')
+            ->join('l.ejemplares', 'e')
+            ->andWhere('e.estado = :estado')
+            ->setParameter('estado', 'disponible')
+            ->groupBy('l.id');
+//            ->getQuery()
+//            ->getResult();
+
+        if (!empty($ejemplarId)) {
+            $queryBuilder
+                ->orWhere($queryBuilder->expr()->in('e.id', ':ejemplarId'))
+                ->setParameter('ejemplarId', $ejemplarId)
+                ->orderBy('MIN(CASE WHEN e.id IN (:ejemplarId) THEN 0 ELSE 1 END)', 'ASC');
+        }
+
+        return $queryBuilder;
     }
 
     //    /**
